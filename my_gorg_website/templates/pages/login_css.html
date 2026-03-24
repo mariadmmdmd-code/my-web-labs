@@ -89,6 +89,26 @@
             
             <button type="submit">Register</button>
         </form>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const registerForm = document.getElementById('registerForm');
+                
+                if (registerForm) {
+                    registerForm.addEventListener('submit', function(e) {
+                        console.log('Register form submitted!');
+                        // e.preventDefault();
+                    });
+                }
+                
+                const loginForm = document.getElementById('loginForm');
+                if (loginForm) {
+                    loginForm.addEventListener('submit', function(e) {
+                        console.log('Login form submitted!');
+                    });
+                }
+            });
+        </script>
         
         {% if login_form.errors or register_form.errors %}
         <div class="form-errors">
