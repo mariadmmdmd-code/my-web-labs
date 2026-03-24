@@ -112,3 +112,14 @@ TELEGRAM_TOKEN = '8740944994:AAE6HOJzV5qRIncQtZkimBmtse5j7o-TEmU'
 TELEGRAM_CHAT_ID = '1194052943'
 
 AUTH_USER_MODEL = 'pages.User'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://und3rwater-python-django-otvt-code-redirect-3.apps.rm1.0a51.p1.openshiftapps.com',
+    'http://und3rwater-python-django-otvt-code-redirect-3.apps.rm1.0a51.p1.openshiftapps.com',
+    'https://*.openshiftapps.com',
+    'http://*.openshiftapps.com',
+]
+
+SECRET_KEY = "j!^q(rj9%&8=cw87#49k#-4uy)hgzb&i0so119#&67bsc5tw26"

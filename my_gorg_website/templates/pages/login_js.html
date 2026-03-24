@@ -3,92 +3,221 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>js validation</title>
+    <title>JS Validation · maria d. presents</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
-<body>
+<body class="page-login">
     <div class="my-fixed-menu">
         <div class="my-menu-header">
             <p style="text-align: center; margin-top: 15px;">
-                <span class="i-present"><a href="{% url 'main' %}">back to main page</a></span>
+                <span class="i-present"><a href="{% url 'main' %}">maria d. presents</a></span>
             </p>
         </div>
         <div class="menu-links">
             <a href="{% url 'page1' %}">page 1</a>
             <a href="{% url 'page2' %}">page 2</a>
             <a href="{% url 'page3' %}">page 3</a>
-            <a href="{% url 'login' %}">login</a>
+            <a href="{% url 'login_js' %}">login</a>
         </div>
-    </div>
-
-    <div class="page-nav">
-        <a href="#basic">basic info</a>
-        <a href="#email">email</a>
-        <a href="#optional">optional info</a>
     </div>
 
     <div class="form-container">
-        <h1 class="form-title">javascript validation</h1>
-        <br>
+        <h1 class="form-title">js validation</h1>
+        <p style="text-align: center; color: #b07873; margin-bottom: 30px;"> </p>
 
-        <form id="validationForm" onsubmit="return validateForm(event)">
-            <div id="basic" class="section">
-                <h3 style="color: #7b3b36; margin-bottom: 15px;">basic info</h3>
-                
-                <div class="form-group">
-                    <label>first name</label>
-                    <input type="text" id="firstName" placeholder="Fisrtname">
-                    <span class="hint" id="firstNameHint">латиница, с заглавной</span>
-                </div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="login">login</button>
+            <button class="tab-btn" data-tab="register">register</button>
+        </div>
 
-                <div class="form-group">
-                    <label>last name</label>
-                    <input type="text" id="lastName" placeholder="Lastname">
-                    <span class="hint" id="lastNameHint">латиница, с заглавной</span>
-                </div>
-
-                <div class="form-group">
-                    <label>age</label>
-                    <input type="number" id="age" placeholder="18-100">
-                    <span class="hint" id="ageHint">от 18 до 100</span>
-                </div>
+        <form id="loginForm" class="auth-form active">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="loginUsername" placeholder="username" required>
             </div>
-
-            <div id="email-section" class="section" style="margin-top: 40px;">
-                <h3 style="color: #7b3b36; margin-bottom: 15px;">email</h3>
-                
-                <div class="form-group">
-                    <label>email address</label>
-                    <input type="email" id="email" placeholder="name@example.com">
-                    <span class="hint" id="emailHint">формат: name@domain.com</span>
-                </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="password" required>
             </div>
-
-            <div id="optional" class="section" style="margin-top: 40px;">
-                <h3 style="color: #7b3b36; margin-bottom: 15px;">optional info</h3>
-                
-                <div class="form-group">
-                    <label>favorite album</label>
-                    <input type="text" id="album" placeholder="heaven or las vegas">
-                    <span class="hint">можно не заполнять</span>
-                </div>
-            </div>
-
-            <div id="validationResult" style="text-align: center; margin: 20px 0; padding: 10px; border-radius: 4px;"></div>
-
-            <div style="text-align: center; margin: 20px 0;">
-                <a href="#" style="color: #b07873;">back to top</a>
-            </div>
-
-            <button type="submit" class="submit-btn">submit</button>
+            <button type="submit">Login</button>
         </form>
 
-        <div class="back-link">
-            <a href="{% url 'login' %}" style="color: #b07873;">back to validation methods</a>
-        </div>
+        <form id="registerForm" class="auth-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="regUsername" pattern="[A-Za-z0-9]+" placeholder="username" required>
+                <span id="regUsernameHint" class="hint"></span>
+            </div>
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="regFirstName" pattern="[A-Z][a-z]+" placeholder="Maria" required>
+                <span id="regFirstNameHint" class="hint"></span>
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" id="regLastName" pattern="[A-Za-z]+" placeholder="D." required>
+                <span id="regLastNameHint" class="hint"></span>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="regEmail" placeholder="your@email.com" required>
+                <span id="regEmailHint" class="hint"></span>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="regPassword" placeholder="password" required>
+                <span id="regPasswordHint" class="hint"></span>
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" id="regConfirmPassword" placeholder="confirm password" required>
+                <span id="regConfirmHint" class="hint"></span>
+            </div>
+            <div class="form-group">
+                <label>Bio (optional)</label>
+                <textarea id="regBio" rows="2" placeholder="tell about yourself..."></textarea>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+
+        <div id="result" class="feedback-status"></div>
     </div>
 
-    <script src="{% static 'js/login.js' %}"></script>
+    <script>
+        // переключение вкладок
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+                document.getElementById(`${tab}Form`).classList.add('active');
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        function validateField(input, hint, validator, validMsg, invalidMsg) {
+            const value = input.value;
+            if (value === '') {
+                hint.innerHTML = '';
+                input.style.borderColor = '#dbcfcf';
+                return false;
+            }
+            if (validator(value)) {
+                hint.innerHTML = validMsg;
+                hint.style.color = '#4CAF50';
+                input.style.borderColor = '#4CAF50';
+                return true;
+            } else {
+                hint.innerHTML = invalidMsg;
+                hint.style.color = '#f44336';
+                input.style.borderColor = '#f44336';
+                return false;
+            }
+        }
+
+        const validators = {
+            username: v => /^[A-Za-z0-9]+$/.test(v),
+            firstName: v => /^[A-Z][a-z]+$/.test(v),
+            lastName: v => /^[A-Za-z]+$/.test(v),
+            email: v => v.includes('@') && v.includes('.'),
+            password: v => v.length >= 6,
+            confirm: (v, pwd) => v === pwd
+        };
+
+        document.getElementById('regUsername').addEventListener('input', e => {
+            validateField(e.target, document.getElementById('regUsernameHint'), 
+                validators.username, '✓ valid', '✗ letters and numbers only');
+        });
+        document.getElementById('regFirstName').addEventListener('input', e => {
+            validateField(e.target, document.getElementById('regFirstNameHint'), 
+                validators.firstName, '✓ valid', '✗ start with capital letter');
+        });
+        document.getElementById('regLastName').addEventListener('input', e => {
+            validateField(e.target, document.getElementById('regLastNameHint'), 
+                validators.lastName, '✓ valid', '✗ letters only');
+        });
+        document.getElementById('regEmail').addEventListener('input', e => {
+            validateField(e.target, document.getElementById('regEmailHint'), 
+                validators.email, '✓ valid', '✗ name@domain.com');
+        });
+        document.getElementById('regPassword').addEventListener('input', e => {
+            validateField(e.target, document.getElementById('regPasswordHint'), 
+                v => validators.password(v), '✓ valid', '✗ min 6 characters');
+        });
+
+        document.getElementById('regConfirmPassword').addEventListener('input', e => {
+            const pwd = document.getElementById('regPassword').value;
+            const isValid = e.target.value === pwd && pwd !== '';
+            const hint = document.getElementById('regConfirmHint');
+            if (isValid) {
+                hint.innerHTML = '✓ passwords match';
+                hint.style.color = '#4CAF50';
+                e.target.style.borderColor = '#4CAF50';
+            } else {
+                hint.innerHTML = '✗ passwords do not match';
+                hint.style.color = '#f44336';
+                e.target.style.borderColor = '#f44336';
+            }
+        });
+
+        // отправка форм через AJAX
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                action: 'login',
+                username: document.getElementById('loginUsername').value,
+                password: document.getElementById('loginPassword').value
+            };
+            const response = await fetch('/login/js/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}'},
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            if (result.status === 'ok') {
+                window.location.href = result.redirect;
+            } else {
+                document.getElementById('result').innerHTML = `${result.message}`;
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pwd = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirmPassword').value;
+            if (pwd !== confirm) {
+                document.getElementById('result').innerHTML = 'passwords do not match';
+                return;
+            }
+            const data = {
+                action: 'register',
+                username: document.getElementById('regUsername').value,
+                first_name: document.getElementById('regFirstName').value,
+                last_name: document.getElementById('regLastName').value,
+                email: document.getElementById('regEmail').value,
+                password1: pwd,
+                password2: confirm,
+                bio: document.getElementById('regBio').value
+            };
+            const response = await fetch('/login/js/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}'},
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            if (result.status === 'ok') {
+                window.location.href = result.redirect;
+            } else {
+                let errors = '';
+                for (let field in result.errors) {
+                    errors += `${field}: ${result.errors[field]}\n`;
+                }
+                document.getElementById('result').innerHTML = `${errors}`;
+            }
+        });
+    </script>
 </body>
 </html>
