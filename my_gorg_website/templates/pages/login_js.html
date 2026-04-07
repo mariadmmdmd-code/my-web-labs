@@ -3,221 +3,326 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>JS Validation · maria d. presents</title>
+    <title>js validation</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <style>
+        /* Дополнительные стили для подсветки ошибок */
+        .error-input {
+            border: 2px solid #e74c3c !important;
+            background-color: #fff5f5 !important;
+        }
+        
+        .valid-input {
+            border: 2px solid #2ecc71 !important;
+            background-color: #f0fff4 !important;
+        }
+        
+        .error-hint {
+            color: #e74c3c !important;
+            font-weight: bold !important;
+        }
+        
+        .success-hint {
+            color: #2ecc71 !important;
+        }
+        
+        #validationResult {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        #validationResult.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        #validationResult.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
 </head>
-<body class="page-login">
+<body>
     <div class="my-fixed-menu">
         <div class="my-menu-header">
             <p style="text-align: center; margin-top: 15px;">
-                <span class="i-present"><a href="{% url 'main' %}">maria d. presents</a></span>
+                <span class="i-present"><a href="{% url 'main' %}">back to main page</a></span>
             </p>
         </div>
         <div class="menu-links">
             <a href="{% url 'page1' %}">page 1</a>
             <a href="{% url 'page2' %}">page 2</a>
             <a href="{% url 'page3' %}">page 3</a>
-            <a href="{% url 'login_js' %}">login</a>
+            <a href="{% url 'login' %}">login</a>
         </div>
+    </div>
+
+    <div class="page-nav">
+        <a href="#basic">basic info</a>
+        <a href="#email">email</a>
+        <a href="#optional">optional info</a>
     </div>
 
     <div class="form-container">
-        <h1 class="form-title">js validation</h1>
-        <p style="text-align: center; color: #b07873; margin-bottom: 30px;"> </p>
+        <h1 class="form-title">javascript validation</h1>
+        <br>
 
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="login">login</button>
-            <button class="tab-btn" data-tab="register">register</button>
+        <form id="validationForm" method="POST">
+            {% csrf_token %}
+
+            <div id="basic" class="section">
+                <h3 style="color: #7b3b36; margin-bottom: 15px;">basic info</h3>
+                
+                <div class="form-group">
+                    <label>first name</label>
+                    <input type="text" id="firstName" name="first_name" placeholder="Firstname">
+                    <span class="hint" id="firstNameHint">латиница, с заглавной</span>
+                </div>
+
+                <div class="form-group">
+                    <label>last name</label>
+                    <input type="text" id="lastName" name="last_name" placeholder="Lastname">
+                    <span class="hint" id="lastNameHint">латиница, с заглавной</span>
+                </div>
+
+                <div class="form-group">
+                    <label>age</label>
+                    <input type="number" id="age" name="age" placeholder="18-100">
+                    <span class="hint" id="ageHint">от 18 до 100</span>
+                </div>
+            </div>
+
+            <div id="email-section" class="section" style="margin-top: 40px;">
+                <h3 style="color: #7b3b36; margin-bottom: 15px;">email</h3>
+                
+                <div class="form-group">
+                    <label>email address</label>
+                    <input type="email" id="email" name="email" placeholder="name@example.com">
+                    <span class="hint" id="emailHint">формат: name@domain.com</span>
+                </div>
+            </div>
+
+            <!-- Блок с паролями -->
+            <div id="password-section" class="section" style="margin-top: 40px;">
+                <h3 style="color: #7b3b36; margin-bottom: 15px;">password</h3>
+                
+                <div class="form-group">
+                    <label>password</label>
+                    <input type="password" id="password" name="password" placeholder="minimum 8 characters">
+                    <span class="hint" id="passwordHint">минимум 8 символов</span>
+                </div>
+
+                <div class="form-group">
+                    <label>confirm password</label>
+                    <input type="password" id="passwordConfirm" name="password_confirm" placeholder="repeat password">
+                    <span class="hint" id="passwordConfirmHint">пароли должны совпадать</span>
+                </div>
+            </div>
+
+            <div id="optional" class="section" style="margin-top: 40px;">
+                <h3 style="color: #7b3b36; margin-bottom: 15px;">optional info</h3>
+                
+                <div class="form-group">
+                    <label>favorite album</label>
+                    <input type="text" id="album" name="favorite_album" placeholder="heaven or las vegas">
+                    <span class="hint">можно не заполнять</span>
+                </div>
+            </div>
+
+            <div id="validationResult" style="display: none;"></div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <a href="#" style="color: #b07873;">back to top</a>
+            </div>
+
+            <button type="submit" class="submit-btn">submit</button>
+        </form>
+
+        <div class="back-link">
+            <a href="{% url 'login' %}" style="color: #b07873;">back to validation methods</a>
         </div>
-
-        <form id="loginForm" class="auth-form active">
-            {% csrf_token %}
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" id="loginUsername" placeholder="username" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="loginPassword" placeholder="password" required>
-            </div>
-            <button type="submit">Login</button>
-        </form>
-
-        <form id="registerForm" class="auth-form">
-            {% csrf_token %}
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" id="regUsername" pattern="[A-Za-z0-9]+" placeholder="username" required>
-                <span id="regUsernameHint" class="hint"></span>
-            </div>
-            <div class="form-group">
-                <label>First Name</label>
-                <input type="text" id="regFirstName" pattern="[A-Z][a-z]+" placeholder="Maria" required>
-                <span id="regFirstNameHint" class="hint"></span>
-            </div>
-            <div class="form-group">
-                <label>Last Name</label>
-                <input type="text" id="regLastName" pattern="[A-Za-z]+" placeholder="D." required>
-                <span id="regLastNameHint" class="hint"></span>
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="regEmail" placeholder="your@email.com" required>
-                <span id="regEmailHint" class="hint"></span>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="regPassword" placeholder="password" required>
-                <span id="regPasswordHint" class="hint"></span>
-            </div>
-            <div class="form-group">
-                <label>Confirm Password</label>
-                <input type="password" id="regConfirmPassword" placeholder="confirm password" required>
-                <span id="regConfirmHint" class="hint"></span>
-            </div>
-            <div class="form-group">
-                <label>Bio (optional)</label>
-                <textarea id="regBio" rows="2" placeholder="tell about yourself..."></textarea>
-            </div>
-            <button type="submit">Register</button>
-        </form>
-
-        <div id="result" class="feedback-status"></div>
     </div>
 
     <script>
-        // переключение вкладок
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tab = btn.dataset.tab;
-                document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
-                document.getElementById(`${tab}Form`).classList.add('active');
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
-        function validateField(input, hint, validator, validMsg, invalidMsg) {
-            const value = input.value;
-            if (value === '') {
-                hint.innerHTML = '';
-                input.style.borderColor = '#dbcfcf';
-                return false;
-            }
-            if (validator(value)) {
-                hint.innerHTML = validMsg;
-                hint.style.color = '#4CAF50';
-                input.style.borderColor = '#4CAF50';
-                return true;
-            } else {
-                hint.innerHTML = invalidMsg;
-                hint.style.color = '#f44336';
-                input.style.borderColor = '#f44336';
-                return false;
-            }
-        }
-
-        const validators = {
-            username: v => /^[A-Za-z0-9]+$/.test(v),
-            firstName: v => /^[A-Z][a-z]+$/.test(v),
-            lastName: v => /^[A-Za-z]+$/.test(v),
-            email: v => v.includes('@') && v.includes('.'),
-            password: v => v.length >= 6,
-            confirm: (v, pwd) => v === pwd
-        };
-
-        document.getElementById('regUsername').addEventListener('input', e => {
-            validateField(e.target, document.getElementById('regUsernameHint'), 
-                validators.username, '✓ valid', '✗ letters and numbers only');
-        });
-        document.getElementById('regFirstName').addEventListener('input', e => {
-            validateField(e.target, document.getElementById('regFirstNameHint'), 
-                validators.firstName, '✓ valid', '✗ start with capital letter');
-        });
-        document.getElementById('regLastName').addEventListener('input', e => {
-            validateField(e.target, document.getElementById('regLastNameHint'), 
-                validators.lastName, '✓ valid', '✗ letters only');
-        });
-        document.getElementById('regEmail').addEventListener('input', e => {
-            validateField(e.target, document.getElementById('regEmailHint'), 
-                validators.email, '✓ valid', '✗ name@domain.com');
-        });
-        document.getElementById('regPassword').addEventListener('input', e => {
-            validateField(e.target, document.getElementById('regPasswordHint'), 
-                v => validators.password(v), '✓ valid', '✗ min 6 characters');
-        });
-
-        document.getElementById('regConfirmPassword').addEventListener('input', e => {
-            const pwd = document.getElementById('regPassword').value;
-            const isValid = e.target.value === pwd && pwd !== '';
-            const hint = document.getElementById('regConfirmHint');
-            if (isValid) {
-                hint.innerHTML = '✓ passwords match';
-                hint.style.color = '#4CAF50';
-                e.target.style.borderColor = '#4CAF50';
-            } else {
-                hint.innerHTML = '✗ passwords do not match';
-                hint.style.color = '#f44336';
-                e.target.style.borderColor = '#f44336';
-            }
-        });
-
-        // отправка форм через AJAX
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const data = {
-                action: 'login',
-                username: document.getElementById('loginUsername').value,
-                password: document.getElementById('loginPassword').value
-            };
-            const response = await fetch('/login/js/', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}'},
-                body: JSON.stringify(data)
-            });
-            const result = await response.json();
-            if (result.status === 'ok') {
-                window.location.href = result.redirect;
-            } else {
-                document.getElementById('result').innerHTML = `${result.message}`;
-            }
-        });
-
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const pwd = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('regConfirmPassword').value;
-            if (pwd !== confirm) {
-                document.getElementById('result').innerHTML = 'passwords do not match';
-                return;
-            }
-            const data = {
-                action: 'register',
-                username: document.getElementById('regUsername').value,
-                first_name: document.getElementById('regFirstName').value,
-                last_name: document.getElementById('regLastName').value,
-                email: document.getElementById('regEmail').value,
-                password1: pwd,
-                password2: confirm,
-                bio: document.getElementById('regBio').value
-            };
-            const response = await fetch('/login/js/', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}'},
-                body: JSON.stringify(data)
-            });
-            const result = await response.json();
-            if (result.status === 'ok') {
-                window.location.href = result.redirect;
-            } else {
-                let errors = '';
-                for (let field in result.errors) {
-                    errors += `${field}: ${result.errors[field]}\n`;
+        // Полностью твоя старая валидация + отправка на сервер
+        (function() {
+            // Валидационные функции
+            const validators = {
+                firstName: {
+                    regex: /^[A-Z][a-z]+$/,
+                    message: 'латиница, с заглавной'
+                },
+                lastName: {
+                    regex: /^[A-Z][a-z]+$/,
+                    message: 'латиница, с заглавной'
+                },
+                age: {
+                    validate: function(value) {
+                        const age = parseInt(value);
+                        return !isNaN(age) && age >= 18 && age <= 100;
+                    },
+                    message: 'от 18 до 100'
+                },
+                email: {
+                    regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'формат: name@domain.com'
+                },
+                password: {
+                    validate: function(value) {
+                        return value.length >= 8;
+                    },
+                    message: 'минимум 8 символов'
+                },
+                passwordConfirm: {
+                    validate: function(value) {
+                        const password = document.getElementById('password').value;
+                        return value === password && value !== '';
+                    },
+                    message: 'пароли должны совпадать'
                 }
-                document.getElementById('result').innerHTML = `${errors}`;
+            };
+
+            // Функция валидации одного поля
+            function validateField(fieldId) {
+                const input = document.getElementById(fieldId);
+                const hint = document.getElementById(fieldId + 'Hint');
+                const validator = validators[fieldId];
+                
+                if (!input || !validator) return true;
+                
+                let isValid = true;
+                
+                if (validator.regex) {
+                    isValid = validator.regex.test(input.value);
+                } else if (validator.validate) {
+                    isValid = validator.validate(input.value);
+                }
+                
+                if (!isValid && input.value !== '') {
+                    input.classList.add('error-input');
+                    input.classList.remove('valid-input');
+                    hint.classList.add('error-hint');
+                    hint.classList.remove('success-hint');
+                } else if (isValid && input.value !== '') {
+                    input.classList.add('valid-input');
+                    input.classList.remove('error-input');
+                    hint.classList.add('success-hint');
+                    hint.classList.remove('error-hint');
+                } else {
+                    input.classList.remove('error-input', 'valid-input');
+                    hint.classList.remove('error-hint', 'success-hint');
+                }
+                
+                return isValid;
             }
-        });
+
+            // Валидация всей формы
+            function validateForm() {
+                let isValid = true;
+                
+                for (const fieldId in validators) {
+                    if (!validateField(fieldId)) {
+                        isValid = false;
+                    }
+                }
+                
+                return isValid;
+            }
+
+            // Добавляем обработчики для live-валидации
+            for (const fieldId in validators) {
+                const input = document.getElementById(fieldId);
+                if (input) {
+                    input.addEventListener('input', function() {
+                        validateField(fieldId);
+                    });
+                    input.addEventListener('blur', function() {
+                        validateField(fieldId);
+                    });
+                }
+            }
+
+            // Обработка отправки формы
+            const form = document.getElementById('validationForm');
+            const resultDiv = document.getElementById('validationResult');
+            
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                // Сначала валидация на клиенте
+                if (!validateForm()) {
+                    resultDiv.style.display = 'block';
+                    resultDiv.className = 'error';
+                    resultDiv.innerHTML = 'Please fix the errors above before submitting.';
+                    setTimeout(() => {
+                        resultDiv.style.display = 'none';
+                    }, 3000);
+                    return;
+                }
+                
+                // Собираем данные
+                const formData = new FormData();
+                formData.append('first_name', document.getElementById('firstName').value);
+                formData.append('last_name', document.getElementById('lastName').value);
+                formData.append('age', document.getElementById('age').value);
+                formData.append('email', document.getElementById('email').value);
+                formData.append('favorite_album', document.getElementById('album').value);
+                formData.append('password', document.getElementById('password').value);
+                formData.append('password_confirm', document.getElementById('passwordConfirm').value);
+                formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+                
+                try {
+                    const response = await fetch('/login/js/', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    resultDiv.style.display = 'block';
+                    
+                    if (data.success) {
+                        resultDiv.className = 'success';
+                        resultDiv.innerHTML = data.message + ' Redirecting...';
+                        setTimeout(() => {
+                            window.location.href = '/registration-success/';
+                        }, 1500);
+                    } else {
+                        resultDiv.className = 'error';
+                        let errorHtml = 'Registration failed:<br>';
+                        for (const [field, errors] of Object.entries(data.errors)) {
+                            errorHtml += `• ${field}: ${errors.join(', ')}<br>`;
+                            // Подсвечиваем проблемные поля
+                            const fieldMap = {
+                                'first_name': 'firstName',
+                                'last_name': 'lastName',
+                                'age': 'age',
+                                'email': 'email',
+                                'password': 'password',
+                                'password_confirm': 'passwordConfirm'
+                            };
+                            const inputId = fieldMap[field];
+                            if (inputId) {
+                                const input = document.getElementById(inputId);
+                                if (input) {
+                                    input.classList.add('error-input');
+                                }
+                            }
+                        }
+                        resultDiv.innerHTML = errorHtml;
+                    }
+                } catch (error) {
+                    resultDiv.style.display = 'block';
+                    resultDiv.className = 'error';
+                    resultDiv.innerHTML = 'Server error. Please try again.';
+                }
+            });
+        })();
     </script>
 </body>
 </html>

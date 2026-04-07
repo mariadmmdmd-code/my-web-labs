@@ -3,141 +3,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CSS Validation · maria d. presents</title>
+    <title> css validation </title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
-<body class="page-login">
+<body>
     <div class="my-fixed-menu">
         <div class="my-menu-header">
             <p style="text-align: center; margin-top: 15px;">
-                <span class="i-present"><a href="{% url 'main' %}">maria d. presents</a></span>
+                <span class="i-present"><a href="{% url 'main' %}">back to main page</a></span>
             </p>
         </div>
         <div class="menu-links">
             <a href="{% url 'page1' %}">page 1</a>
             <a href="{% url 'page2' %}">page 2</a>
             <a href="{% url 'page3' %}">page 3</a>
-            <a href="{% url 'login_css' %}">login</a>
+            <a href="{% url 'login' %}">login</a>
         </div>
+    </div>
+
+    <div class="page-nav">
+        <a href="#basic">basic info</a>
+        <a href="#email">email</a>
+        <a href="#optional">optional info</a>
     </div>
 
     <div class="form-container">
         <h1 class="form-title">css validation</h1>
-        <p style="text-align: center; color: #b07873; margin-bottom: 30px;"> </p>
+        <br>
 
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="login">login</button>
-            <button class="tab-btn" data-tab="register">register</button>
-        </div>
-
-        <form id="loginForm" method="post" class="auth-form active">
-            {% csrf_token %}
-            <input type="hidden" name="action" value="login">
-            
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" placeholder="username" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" placeholder="password" required>
-            </div>
-            
-            <button type="submit">Login</button>
-        </form>
-
-        <form id="registerForm" method="post" class="auth-form">
-            {% csrf_token %}
-            <input type="hidden" name="action" value="register">
-            
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" pattern="[A-Za-z0-9]+" placeholder="username" required>
-            </div>
-            
-            <div class="form-group">
-                <label>First Name</label>
-                <input type="text" name="first_name" pattern="[A-Z][a-z]+" placeholder="Maria" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Last Name</label>
-                <input type="text" name="last_name" pattern="[A-Za-z]+" placeholder="D." required>
-            </div>
-            
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" placeholder="your@email.com" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password1" placeholder="password" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Confirm Password</label>
-                <input type="password" name="password2" placeholder="confirm password" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Bio (optional)</label>
-                <textarea name="bio" rows="2" placeholder="tell about yourself..."></textarea>
-            </div>
-            
-            <button type="submit">Register</button>
-        </form>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const registerForm = document.getElementById('registerForm');
-                
-                if (registerForm) {
-                    registerForm.addEventListener('submit', function(e) {
-                        console.log('Register form submitted!');
-                        // e.preventDefault();
-                    });
-                }
-                
-                const loginForm = document.getElementById('loginForm');
-                if (loginForm) {
-                    loginForm.addEventListener('submit', function(e) {
-                        console.log('Login form submitted!');
-                    });
-                }
-            });
-        </script>
-        
-        {% if login_form.errors or register_form.errors %}
-        <div class="form-errors">
-            {{ login_form.non_field_errors }}
-            {{ register_form.non_field_errors }}
-            {% for field in login_form %}
-                {% if field.errors %}
-                    <div>{{ field.label }}: {{ field.errors.0 }}</div>
-                {% endif %}
+        <!-- вывод сообщений об успехах/ошибках -->
+        {% if messages %}
+            {% for message in messages %}
+                <div style="color: green; text-align: center; padding: 10px; margin: 10px 0; background: #d4edda; border-radius: 5px;">
+                    {{ message }}
+                </div>
             {% endfor %}
-            {% for field in register_form %}
-                {% if field.errors %}
-                    <div>{{ field.label }}: {{ field.errors.0 }}</div>
-                {% endif %}
-            {% endfor %}
-        </div>
         {% endif %}
-    </div>
 
-    <script>
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tab = btn.dataset.tab;
-                document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
-                document.getElementById(`${tab}Form`).classList.add('active');
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-    </script>
+        {% if form.errors %}
+            <div style="color: red; text-align: center; padding: 10px; margin: 10px 0; background: #f8d7da; border-radius: 5px;">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div id="basic" class="section">
+                <h3 style="color: #7b3b36; margin-bottom: 15px;">1. basic info</h3>
+                
+                <div class="form-group">
+                    <label>first name</label>
+                    <input type="text" name="first_name" pattern="[A-Z][a-z]+" placeholder="Firstname" required value="{{ form.first_name.value|default:'' }}">
+                    <span class="hint">латиница, с заглавной</span>
+                </div>
+
+                <div class="form-group">
+                    <label>last name</label>
+                    <input type="text" name="last_name" pattern="[A-Z][a-z]+" placeholder="Lastname" required value="{{ form.last_name.value|default:'' }}">
+                    <span class="hint">латиница, с заглавной</span>
+                </div>
+
+                <div class="form-group">
+                    <label>age</label>
+                    <input type="number" name="age" min="18" max="100" placeholder="18-100" required value="{{ form.age.value|default:'' }}">
+                    <span class="hint">от 18 до 100</span>
+                </div>
+            </div>
+
+            <div id="email" class="section" style="margin-top: 40px;">
+                <h3 style="color: #7b3b36; margin-bottom: 15px;">2. email</h3>
+                
+                <div class="form-group">
+                    <label>email address</label>
+                    <input type="email" name="email" placeholder="name@example.com" required value="{{ form.email.value|default:'' }}">
+                    <span class="hint">формат: name@domain.com</span>
+                </div>
+            </div>
+
+            <!-- пароли -->
+            <div id="password-section" class="section" style="margin-top: 40px;">
+                <h3 style="color: #7b3b36; margin-bottom: 15px;">3. password</h3>
+                
+                <div class="form-group">
+                    <label>password</label>
+                    <input type="password" name="password" placeholder="minimum 8 characters" required>
+                    <span class="hint">минимум 8 символов</span>
+                </div>
+
+                <div class="form-group">
+                    <label>confirm password</label>
+                    <input type="password" name="password_confirm" placeholder="repeat password" required>
+                    <span class="hint">пароли должны совпадать</span>
+                </div>
+            </div>
+
+            <div id="optional" class="section" style="margin-top: 40px;">
+                <h3 style="color: #7b3b36; margin-bottom: 15px;">4. optional info</h3>
+                
+                <div class="form-group">
+                    <label>favorite album</label>
+                    <input type="text" name="favorite_album" placeholder="heaven or las vegas" value="{{ form.favorite_album.value|default:'' }}">
+                    <span class="hint">можно не заполнять</span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <a href="#" style="color: #b07873;"> back to top</a>
+            </div>
+
+            <button type="submit" class="submit-btn">submit</button>
+        </form>
+
+        <div class="back-link">
+            <a href="{% url 'login' %}" style="color: #b07873;"> back to validation methods</a>
+        </div>
+    </div>
 </body>
 </html>

@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 from django.views.generic import TemplateView
 
-
 urlpatterns = [
     path('', views.main_page, name='main'),
     path('page1/', views.page1, name='page1'),
@@ -12,4 +11,5 @@ urlpatterns = [
     path('login/css/', views.login_css, name='login_css'),
     path('login/js/', views.login_js, name='login_js'),
     path('send-feedback/', views.send_feedback, name='send_feedback'),
+    path('registration-success/', views.registration_success, name='registration_success'),
 ]
