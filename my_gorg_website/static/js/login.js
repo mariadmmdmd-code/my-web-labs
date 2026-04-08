@@ -33,7 +33,6 @@ async function validateForm(event) {
             let errorHtml = '';
             for (const [field, errors] of Object.entries(data.errors)) {
                 errorHtml += `<p>${field}: ${errors.join(', ')}</p>`;
-                // Подсветка полей
                 const input = document.getElementById(field === 'first_name' ? 'firstName' : 
                                                        field === 'last_name' ? 'lastName' :
                                                        field === 'age' ? 'age' :

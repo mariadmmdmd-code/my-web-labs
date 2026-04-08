@@ -76,7 +76,7 @@ class CSSRegistrationForm(forms.ModelForm):
     
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.username = self.cleaned_data['email']  # используем email как username
+        user.username = self.cleaned_data['email']  # использую email как username
         user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
@@ -107,7 +107,7 @@ class JSRegistrationForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         if CustomUser.objects.filter(email=email).exists():
-            raise forms.ValidationError('Email already registered')
+            raise forms.ValidationError('This email is already registered')
         return email
     
     def save(self):
