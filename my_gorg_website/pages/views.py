@@ -59,7 +59,9 @@ def login_css(request):
     if request.method == 'POST':
         form = CSSRegistrationForm(request.POST)
         if form.is_valid():
+            # print("AGE FROM FORM:", form.cleaned_data['age'])
             user = form.save()
+            # print("AGE SAVED:", user.age)
             messages.success(request, f'Welcome, {user.first_name}! Registration successful!')
             return redirect('registration_success')
         else:
@@ -73,7 +75,9 @@ def login_js(request):
     if request.method == 'POST':
         form = JSRegistrationForm(request.POST)
         if form.is_valid():
+            # print("AGE FROM FORM:", form.cleaned_data['age'])
             user = form.save()
+            # print("AGE SAVED:", user.age)
             return JsonResponse({
                 'success': True,
                 'message': f'Welcome, {user.first_name}! Registration successful!'

@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <style>
-        /* Дополнительные стили для подсветки ошибок */
         .error-input {
             border: 2px solid #e74c3c !important;
             background-color: #fff5f5 !important;
@@ -107,7 +106,7 @@
                 </div>
             </div>
 
-            <!-- Блок с паролями -->
+            <!-- блок с паролями -->
             <div id="password-section" class="section" style="margin-top: 40px;">
                 <h3 style="color: #7b3b36; margin-bottom: 15px;">password</h3>
                 
@@ -149,9 +148,7 @@
     </div>
 
     <script>
-        // Полностью твоя старая валидация + отправка на сервер
         (function() {
-            // Валидационные функции
             const validators = {
                 firstName: {
                     regex: /^[A-Z][a-z]+$/,
@@ -187,7 +184,6 @@
                 }
             };
 
-            // Функция валидации одного поля
             function validateField(fieldId) {
                 const input = document.getElementById(fieldId);
                 const hint = document.getElementById(fieldId + 'Hint');
@@ -221,7 +217,6 @@
                 return isValid;
             }
 
-            // Валидация всей формы
             function validateForm() {
                 let isValid = true;
                 
@@ -234,7 +229,6 @@
                 return isValid;
             }
 
-            // Добавляем обработчики для live-валидации
             for (const fieldId in validators) {
                 const input = document.getElementById(fieldId);
                 if (input) {
@@ -247,14 +241,12 @@
                 }
             }
 
-            // Обработка отправки формы
             const form = document.getElementById('validationForm');
             const resultDiv = document.getElementById('validationResult');
             
             form.addEventListener('submit', async function(event) {
                 event.preventDefault();
                 
-                // Сначала валидация на клиенте
                 if (!validateForm()) {
                     resultDiv.style.display = 'block';
                     resultDiv.className = 'error';
@@ -265,7 +257,6 @@
                     return;
                 }
                 
-                // Собираем данные
                 const formData = new FormData();
                 formData.append('first_name', document.getElementById('firstName').value);
                 formData.append('last_name', document.getElementById('lastName').value);
@@ -297,7 +288,6 @@
                         let errorHtml = 'Registration failed:<br>';
                         for (const [field, errors] of Object.entries(data.errors)) {
                             errorHtml += `• ${field}: ${errors.join(', ')}<br>`;
-                            // Подсвечиваем проблемные поля
                             const fieldMap = {
                                 'first_name': 'firstName',
                                 'last_name': 'lastName',
